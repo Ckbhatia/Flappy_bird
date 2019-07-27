@@ -32,6 +32,27 @@ const background = {
     }
 }
 
+// Foreground object
+const foreground = {
+    sX: 276,
+    sY: 0,
+    w: 224,
+    h: 112,
+    x: 0,
+    y: canvas.height - 112,
+
+    /**
+     * Draws images on context
+     * @param {none}
+     * @return {none}
+     */
+    draw: function() {
+        ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
+
+        ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h);
+    }
+}
+
 
 /**
  * 
@@ -41,7 +62,9 @@ const background = {
 function draw() {
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     background.draw();
+    foreground.draw();
 }
 
 /**
@@ -49,9 +72,9 @@ function draw() {
  * @param {none}
  * @return {none}
  */
-function update() {
+// function update() {
 
-}
+// }
 
 /**
  * 
