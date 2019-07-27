@@ -64,6 +64,7 @@ const foreground = {
     h: 112,
     x: 0,
     y: canvas.height - 112,
+    dx: 2,
 
     /**
      * Draws images on context
@@ -74,6 +75,17 @@ const foreground = {
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
 
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h);
+    },
+
+    /**
+     * Renders foreground as moving
+     * @param {none}
+     * @return {undefined}
+     */
+    update: function() {
+        if (state.current == state.game) {
+            this.x = (this.x - this.dx) % (this.w/2);
+        }
     }
 }
 
@@ -215,6 +227,8 @@ function draw() {
 function update() {
     // Invokes the bird's update method
     bird.update();
+    // Invokes the foreground's update method
+    foreground.update();
 }
 
 /**
