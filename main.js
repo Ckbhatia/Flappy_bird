@@ -92,6 +92,7 @@ const bird = {
     // frame
     frame: 0,
     gravity: 0.25,
+    jump: 4.6,
     speed: 0,
 
     draw: function() {
@@ -101,10 +102,20 @@ const bird = {
         ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h, this.x - this.w/2, this.y - this.h/2, this.w, this.h);
     },
 
-    // flap: function() {
-    //     // 
-    // } 
-
+    /**
+     * Changes the speed of the bird
+     * @param {none}
+     * @return {undefined}
+     */
+    flap: function() {
+        this.speed = - this.jump;   
+    },
+    
+    /**
+     * Updates the bird properties and game state
+     * @param {none}
+     * @return {undefined}
+     */
     update: function() {
     // If the current state is get ready, the bird flap slowly
         this.period = state.current == state.getReady ? 10 : 5;
