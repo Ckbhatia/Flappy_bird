@@ -95,12 +95,22 @@ const bird = {
     draw: function() {
         let bird = this.animation[this.frame];
 
+
         ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h, this.x - this.w/2, this.y - this.h/2, this.w, this.h);
     },
 
-    flap: function() {
-        // 
-    } 
+    // flap: function() {
+    //     // 
+    // } 
+
+    update: function() {
+    // If the current state is get ready, the bird flap slowly
+        this.period = state.current == state.getReady ? 10 : 5;
+        // Increment the frame by 1, each period
+        this.frame += frames % this.period == 0 ? 1 : 0;
+        // Frame goes from 0 to 4, then again resets to 0
+        this.frame = this.frame % this.animation.length;
+    }
 
 }
 
@@ -158,7 +168,8 @@ function draw() {
  * @return {none}
  */
 function update() {
-
+    // Invokes the bird's update method
+    bird.update();
 }
 
 /**
