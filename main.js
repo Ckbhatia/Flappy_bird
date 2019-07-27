@@ -91,6 +91,8 @@ const bird = {
 
     // frame
     frame: 0,
+    gravity: 0.25,
+    speed: 0,
 
     draw: function() {
         let bird = this.animation[this.frame];
@@ -110,6 +112,22 @@ const bird = {
         this.frame += frames % this.period == 0 ? 1 : 0;
         // Frame goes from 0 to 4, then again resets to 0
         this.frame = this.frame % this.animation.length;
+
+        if (state.current == state.getReady) {
+            this.y = 150; // Reset the position of the bird after game over
+
+        }
+        else {
+            this.speed += this.gravity;
+            this.y += this.speed;
+
+            if (this.y + this.h/2 >= canvas.height - foreground.h) {
+                this.y = canvas.height - foreground.h - this.h/2;
+                if (state.current == state.game) {
+                    state.current = state.over;
+                }
+            }
+        }
     }
 
 }
