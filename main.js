@@ -203,6 +203,77 @@ const gameOver = {
     }
 }
 
+// Pipes object
+const pipes = {
+    // Array for different position
+    position: [],
+    
+    top: {
+        sX: 553,
+        sY: 0
+    },
+    bottom:{
+        sX: 502,
+        sY: 0
+    },
+    
+    w: 53,
+    h: 400,
+    gap: 85,
+    maxYPos: -150,
+    dx: 2,
+
+    /**
+     * Draws pipes to the canvas
+     * @param {none}
+     * @return {undefined}
+     */
+    draw : function() {
+        for(let i  = 0; i < this.position.length; i++){
+            let p = this.position[i];
+            
+            let topYPos = p.y;
+            let bottomYPos = p.y + this.h + this.gap;
+            
+            // top pipe
+            ctx.drawImage(sprite, this.top.sX, this.top.sY, this.w, this.h, p.x, topYPos, this.w, this.h);  
+            
+            // bottom pipe
+            ctx.drawImage(sprite, this.bottom.sX, this.bottom.sY, this.w, this.h, p.x, bottomYPos, this.w, this.h);  
+        }
+    },
+
+    /**
+     * Updates pipes position
+     * @param {none}
+     * @return {undefined}
+     */
+    update: function() {
+        // Checks the state if current is game then skipps it
+        if (state.current !== state.game) return;
+
+
+        if (frames % 100 == 0) {
+
+            this.position.push({
+                x : canvas.width,
+                y : this.maxYPos * ( Math.random() + 1)
+            });
+
+        }
+        
+        for (let k = 0; k < this.position.length; k++) {
+            let p = this.position[k];
+            p.x -= this.dx;
+
+            // If the pipes go beyond canvas, delete them
+            if (p.x + this.w <= 0) {
+                this.position.shift();
+            }
+        }
+    }
+}
+
 /**
  * 
  * @param {none}
@@ -214,21 +285,24 @@ function draw() {
 
     background.draw();
     foreground.draw();
+    pipes.draw();
     bird.draw();
     getReady.draw();
     gameOver.draw();
 }
 
 /**
- * 
+ * Invokes the all update functions of main.js file
  * @param {none}
- * @return {none}
+ * @return {undefined}
  */
 function update() {
     // Invokes the bird's update method
     bird.update();
     // Invokes the foreground's update method
     foreground.update();
+    // Invokes the pipe's update method
+    pipes.update();
 }
 
 /**
