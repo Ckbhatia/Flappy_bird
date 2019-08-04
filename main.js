@@ -29,9 +29,11 @@ canvas.addEventListener('click', function(evt) {
     switch(state.current) {
         case state.getReady:
             state.current = state.game;
+            swooshing_sound.play();
             break;
         case state.game:
              bird.flap();
+             flap_sound.play();
              break;
         case state.over:
             let rect = canvas.getBoundingClientRect();
@@ -50,6 +52,24 @@ canvas.addEventListener('click', function(evt) {
 // Sprite image
 const sprite = new Image();
 sprite.src = "assets/media/img/sprite.png";
+
+
+// Sounds effects
+const score_sound = new Audio();
+score_sound.src = 'assets/media/audio/sfx_point.wav';
+
+const flap_sound = new Audio();
+flap_sound.src = 'assets/media/audio/sfx_flap.wav';
+
+const hit_sound = new Audio();
+hit_sound.src = 'assets/media/audio/sfx_hit.wav';
+
+const swooshing_sound = new Audio();
+swooshing_sound.src = 'assets/media/audio/sfx_swooshing.wav';
+
+const die_sound = new Audio();
+die_sound.src = 'assets/media/audio/sfx_die.wav';
+
 
 // Background object
 const background = {
@@ -175,6 +195,7 @@ const bird = {
                 this.y = canvas.height - foreground.h - this.h/2;
                 if (state.current == state.game) {
                     state.current = state.over;
+                    die_sound.play();
                 }
             }
             // If the speed is greater than the jump means bird is faling down 
@@ -294,12 +315,13 @@ const pipes = {
             if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w && bird.y + bird.radius > p.y 
                 && bird.y - bird.radius < p.y + this.h) {
                     state.current = state.over;
+                    hit_sound.play();
             }
             // Bottom pipe
             if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w && 
                 bird.y + bird.radius > bottomPipeYPos && bird.y - bird.radius < bottomPipeYPos + this.h) {
                     state.current = state.over;
-
+                    hit_sound.play();                    
             }
 
             // Move the pipes to the left
@@ -310,6 +332,8 @@ const pipes = {
                 this.position.shift();
                 // Increment the score by one
                 score.value += 1;
+                // Score sound
+                score_sound.play();
                 // Best score
                 score.best = Math.max(score.value, score.best);
                 // Sent the best score to localStorage
