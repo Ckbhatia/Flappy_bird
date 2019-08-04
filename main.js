@@ -16,8 +16,16 @@ const state = {
     over: 2
 }
 
+// Start button
+const startBtn = {
+    x: 120,
+    y: 263,
+    w: 83,
+    h: 29
+}
+
 // Event listener on canvas
-document.addEventListener('click', function(evt) {
+canvas.addEventListener('click', function(evt) {
     switch(state.current) {
         case state.getReady:
             state.current = state.game;
@@ -25,8 +33,16 @@ document.addEventListener('click', function(evt) {
         case state.game:
              bird.flap();
              break;
-        case state.over: 
-            state.current = state.getReady;
+        case state.over:
+            let rect = canvas.getBoundingClientRect();
+            let clickX = evt.clientX - rect.left;
+            let clickY = evt.clientY - rect.top;
+            if (clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h) {
+                pipes.reset();
+                bird.speedReset();
+                score.reset();
+                state.current = state.getReady;
+            }
             break;
     }
 })
@@ -170,6 +186,9 @@ const bird = {
                 this.rotation = -25 * degree;
             }
         }
+    },
+    speedReset: function() {
+        this.speed = 0;
     }
 
 }
@@ -275,16 +294,11 @@ const pipes = {
             if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w && bird.y + bird.radius > p.y 
                 && bird.y - bird.radius < p.y + this.h) {
                     state.current = state.over;
-                    // Reset pipe postiion
-                    this.position = [];
             }
-             
             // Bottom pipe
             if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w && 
                 bird.y + bird.radius > bottomPipeYPos && bird.y - bird.radius < bottomPipeYPos + this.h) {
                     state.current = state.over;
-                    // Reset pipe position
-                    this.position = [];
 
             }
 
@@ -302,6 +316,9 @@ const pipes = {
                 localStorage.setItem('best', score.best);
             }
         }
+    },
+    reset: function() {
+        this.position = [];
     }
 }
 
@@ -328,6 +345,9 @@ const score = {
             ctx.fillText(this.best, 225, 228);
             ctx.strokeText(this.best, 225, 228);
         }
+    },
+    reset: function() {
+        this.value = 0;
     }
 }
 
