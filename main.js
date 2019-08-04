@@ -24,8 +24,11 @@ const startBtn = {
     h: 29
 }
 
-// Event listener on canvas
-canvas.addEventListener('click', function(evt) {
+/**
+ * Handles the click of the key
+ * @param {object} event
+ */
+const handleKey = evt => {
     switch(state.current) {
         case state.getReady:
             state.current = state.game;
@@ -47,7 +50,28 @@ canvas.addEventListener('click', function(evt) {
             }
             break;
     }
-})
+}
+
+const handleKeyup = e => {
+    // Checks if pressed key is up arrow key or space key
+    if (e.keyCode === 32 || e.keyCode === 38) {
+        // Invokes handlekey function with event argument
+        handleKey(e);
+
+        if (state.current === state.over) {
+            pipes.reset();
+            bird.speedReset();
+            score.reset();
+            state.current = state.getReady;
+        }
+    }
+}
+
+// Listen for press of space ky and invokes a function
+document.addEventListener('keyup', handleKey);
+
+// Listen for click and invokes handleKey function
+canvas.addEventListener('click', handleKey);
 
 // Sprite image
 const sprite = new Image();
